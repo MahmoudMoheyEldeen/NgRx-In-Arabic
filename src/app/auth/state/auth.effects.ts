@@ -6,14 +6,14 @@ import { AuthActions } from './auth.actions';
 
 @Injectable()
 export class AuthEffects {
-  loginAuths$ = createEffect(() => {
+  login$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AuthActions.loginAuths),
-      concatMap(() =>
+      ofType(AuthActions.login),
+      concatMap((action) =>
         /** An EMPTY observable only emits completion. Replace with your own observable API request */
         EMPTY.pipe(
-          map((data) => AuthActions.loginAuthsSuccess({ data })),
-          catchError((error) => of(AuthActions.loginAuthsFailure({ error })))
+          map((data) => AuthActions.loginSuccess({ data })),
+          catchError((error) => of(AuthActions.loginFailure({ error })))
         )
       )
     );

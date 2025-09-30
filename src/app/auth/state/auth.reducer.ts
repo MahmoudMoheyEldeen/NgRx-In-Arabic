@@ -3,15 +3,21 @@ import { AuthActions } from './auth.actions';
 
 export const authFeatureKey = 'auth';
 
-export interface State {}
+export interface IAuthState {
+  email: string;
+  localId: string;
+}
 
-export const initialState: State = {};
+export const initialState: IAuthState = {
+  email: '',
+  localId: '',
+};
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.loginAuths, (state) => state),
-  on(AuthActions.loginAuthsSuccess, (state, action) => state),
-  on(AuthActions.loginAuthsFailure, (state, action) => state)
+  on(AuthActions.login, (state) => state),
+  on(AuthActions.loginSuccess, (state, action) => state),
+  on(AuthActions.loginFailure, (state, action) => state)
 );
 
 export const authFeature = createFeature({
