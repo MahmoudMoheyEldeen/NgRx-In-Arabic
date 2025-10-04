@@ -5,10 +5,11 @@ import {
   isDevMode,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideStore } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { authFeature } from './auth/state/auth.reducer';
 import { AuthEffects } from './auth/state/auth.effects';
@@ -23,10 +24,10 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideStore({
       [authFeature.name]: authFeature.reducer,
-      [productsesFeature.name]: productsesFeature.reducer,
     }),
-    
 
+    provideHttpClient(withInterceptorsFromDi()),
+    provideEffects([AuthEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AuthActions } from '../../auth.actions';
+import { AuthService, IsignInResponse } from '../../../services/auth.service';
+import { authReducer } from '../../auth.reducer';
 
 @Component({
   selector: 'app-auth',
@@ -15,6 +17,7 @@ export class Auth implements OnInit {
   @ViewChild('passwordInput') passwordInput!: ElementRef<HTMLInputElement>;
   private store = inject(Store);
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
   loginForm!: FormGroup;
 
   isPasswordVisible = false;
@@ -22,7 +25,7 @@ export class Auth implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]], // زودنا email validator
+      email: ['', [Validators.required]], // زودنا email validator
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
@@ -46,8 +49,17 @@ export class Auth implements OnInit {
   }
 
   signIn(): void {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
     const { email, password } = this.loginForm.value;
+
+    // Dispatch the login action with just email and password
     this.store.dispatch(AuthActions.login({ email, password }));
-    console.log('submit value', this.loginForm.value); // لازم يطبع آخر قيم مكتوبة
+
+    // The actual sign-in logic is now handled by the effect
+    this.isLoading = false;
   }
 }

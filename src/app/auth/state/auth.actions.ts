@@ -1,10 +1,16 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { IAuthState } from './auth.reducer';
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
 
 export const AuthActions = createActionGroup({
   source: 'Auth',
   events: {
-    Login: props<{ email: string; password: string }>(),
-    'Login Success': props<{ data: unknown }>(),
-    'Login Failure': props<{ error: unknown }>(),
+    Login: props<LoginCredentials>(),
+    'Login Success': props<IAuthState>(),
+    'Login Failure': props<{ error: string }>(),
   },
 });
